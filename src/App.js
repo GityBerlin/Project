@@ -1,7 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-import BasicTable from './comp/home';
-
+import BasicTable from './comp/users';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 function App(){
  return(
  <> 
@@ -9,8 +10,11 @@ function App(){
 <header className="App-header">
 <img src={logo} className="App-logo" alt="logo" />
 
-  
-<BasicTable></BasicTable>
+  <Provider store={store}>
+    <BasicTable></BasicTable>
+</Provider>
+    {/* <BasicTable></BasicTable> */}
+
 </header>
 </>
 );

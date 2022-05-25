@@ -10,37 +10,49 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState, useRef } from 'react'
 import { getUser1 } from './servUser'
-
+import { useDispatch,useSelector } from 'react-redux';
+import  {allUser} from '../redux/action';
 
 export default function BasicTable() {
     let [rows, setRows] = useState([])
-    const setFilter = useRef("");
-    var userFromServer;
+    var setName = useRef("");
+    const setEmail = useRef("");
+    const allUserRedux = useSelector(store => store.reducerUser.users)
 
+    let dis = useDispatch();
+    
+// var userFromServer=[]
     useEffect(() => {
-        allUser()
+        debugger
+        // console.log(allUserRedux);
+        getUser()
     }, [])
 
-    async function allUser() {
+    async function  getUser(){
         var userFromServer = await getUser1()
-        if (userFromServer)
+        if (userFromServer){ 
             setRows(rows.concat(userFromServer))
+            debugger
+            
+            dis(allUser(userFromServer));
+            console.log(allUserRedux);
+        }
     }
     function nameSearch() {
        
-        console.log(setFilter.current.value);
-        setRows(rows.filter(x => x.name.includes(setFilter.current.value)))
+       
+        setRows(allUserRedux.filter(x => x.name.includes(setName.current.value)))
     }
     function emailSearch() {
         
-        setRows(rows.filter(x =>{x.email.includes(setFilter.current.value) }))
+        setRows(allUserRedux.filter(x =>{x.email.includes(setEmail.current.value) }))
     }
     return (
         <>
              <p>name:</p>
-            <input type="text" placeholder="Search 🔍" ref={setFilter} onKeyUp={nameSearch}></input>
+            <input type="text" placeholder="Search 🔍" ref={setName} onKeyUp={nameSearch}></input>
             <p>email:</p>
-            <input type="text" placeholder="Search 🔍" ref={setFilter} onKeyUp={emailSearch}></input>
+            <input type="text" placeholder="Search 🔍" ref={setEmail} onKeyUp={emailSearch}></input>
        
 
 
