@@ -32,6 +32,8 @@ export default function UserPost() {
     }
     function idSearch() {
          setNewUser(allUserRedux.filter(x => x.userId==(setId.current.value)))
+         if(!setId.current.value)
+         setNewUser(allUserRedux)
 
     }
     function newPost1() {
