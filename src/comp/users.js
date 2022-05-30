@@ -1,6 +1,6 @@
 
 
-import * as React from 'react';
+import React,{ useEffect, useState, useRef } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,52 +8,55 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useEffect, useState, useRef } from 'react'
-import { getUser1 } from './servUser'
-import { useDispatch,useSelector } from 'react-redux';
-import  {allUser} from '../redux/action';
+import { getUser1 } from '../services/servUser'
+import { useDispatch, useSelector } from 'react-redux';
+import { allUser } from '../redux/action';
 
-export default function BasicTable() {
+export default function DisplayUser() {
     let [rows, setRows] = useState([])
-    var setName = useRef("");
+    const setName = useRef("");
     const setEmail = useRef("");
-    const allUserRedux = useSelector(store => store.reducerUser.users)
-
+    let allUserRedux = useSelector((store) => store.reducerUser.users)
+    // const [screenSize, setScreenSize] = useState(window.innerWidth < 600)
     let dis = useDispatch();
-    
-// var userFromServer=[]
+
     useEffect(() => {
-        debugger
-        // console.log(allUserRedux);
         getUser()
     }, [])
+    //=====רספונסיבי==========
+    // function isSmall() {
+    //   setScreenSize(window.innerWidth<600)
+    // }
 
-    async function  getUser(){
+    // useEffect(()=>{
+    // window.addEventListener('resize',isSmall)
+    // },[])
+
+    async function getUser() {
         var userFromServer = await getUser1()
-        if (userFromServer){ 
+        if (userFromServer) {
             setRows(rows.concat(userFromServer))
-            debugger
-            
             dis(allUser(userFromServer));
+            debugger
             console.log(allUserRedux);
         }
     }
     function nameSearch() {
-       
-       
+
+
         setRows(allUserRedux.filter(x => x.name.includes(setName.current.value)))
     }
     function emailSearch() {
-        
-        setRows(allUserRedux.filter(x =>{x.email.includes(setEmail.current.value) }))
+
+        setRows(allUserRedux.filter(x =>  x.email.includes(setEmail.current.value) ))
     }
     return (
         <>
-             <p>name:</p>
+            <p>name:</p>
             <input type="text" placeholder="Search 🔍" ref={setName} onKeyUp={nameSearch}></input>
             <p>email:</p>
             <input type="text" placeholder="Search 🔍" ref={setEmail} onKeyUp={emailSearch}></input>
-       
+            <br></br>
 
 
             <TableContainer component={Paper}>
